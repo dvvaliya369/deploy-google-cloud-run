@@ -9,7 +9,7 @@ env:
   PROJECT_ID: pivotal-purpose-480304-k6
   SERVICE_NAME: test
   REGION: us-central1
-  REPOSITORY: us-docker.pkg.dev/cloudrun/container
+  REPOSITORY: us-central1-docker.pkg.dev/pivotal-purpose-480304-k6/container
   IMAGE_NAME: hello
 
 jobs:
@@ -32,19 +32,19 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v3
 
-      # - name: Configure Docker for Artifact Registry
-      #   run: gcloud auth configure-docker us-docker.pkg.dev
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker us-docker.pkg.dev
 
-      # - name: Build Docker image
-      #   run: |
-      #     docker build -t ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
-      #     docker tag ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
-      #                ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+          docker tag ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+                     ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
 
-      # - name: Push Docker image
-      #   run: |
-      #     docker push ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-      #     docker push ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
 
 
       - name: Deploy to Cloud Run
